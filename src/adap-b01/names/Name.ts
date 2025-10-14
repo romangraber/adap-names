@@ -16,6 +16,7 @@ export const ESCAPE_CHARACTER = '\\';
 export class Name {
 
     private delimiter: string = DEFAULT_DELIMITER;
+
     private components: string[] = [];
 
     /** Expects that all Name components are properly masked */
