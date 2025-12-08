@@ -1,69 +1,82 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
 import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
+import {IllegalArgumentException} from "../common/IllegalArgumentException";
+import {MethodFailedException} from "../common/MethodFailedException";
+import {InvalidStateException} from "../common/InvalidStateException";
 
 export class StringArrayName extends AbstractName {
 
     protected components: string[] = [];
 
     constructor(source: string[], delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
-    }
-
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        super(delimiter);
+        this.components = source;
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.components.length;
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        IllegalArgumentException.assert(this.isValidIndex(i));
+        const component = this.components[i];
+
+        InvalidStateException.assert(this.isValidComponent(component));
+
+        return component;
     }
 
     public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        IllegalArgumentException.assert(this.isValidIndex(i));
+        IllegalArgumentException.assert(this.isValidComponent(c));
+
+        this.components[i] = c;
+
+        const newComponent: string = this.getComponent(i);
+
+        InvalidStateException.assert(this.isValidComponent(newComponent));
+
+        MethodFailedException.assert(this.getComponent(i) === c);
     }
 
     public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        IllegalArgumentException.assert(this.isValidIndex(i));
+        IllegalArgumentException.assert(this.isValidComponent(c));
+
+        const oldLength = this.getNoComponents();
+
+        this.components.splice(i, 0, c);
+
+        const newLength: number = this.getNoComponents();
+        const newComponent: string = this.getComponent(i);
+
+        InvalidStateException.assert(this.isValidComponent(newComponent));
+
+        MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
     }
 
     public append(c: string) {
-        throw new Error("needs implementation or deletion");
+
+        IllegalArgumentException.assert(this.isValidComponent(c));
+
+        const oldLength = this.getNoComponents();
+        this.components.push(c);
+
+        const newLength: number = this.getNoComponents();
+        const newComponent: string = this.getComponent(newLength - 1);
+
+        InvalidStateException.assert(this.isValidComponent(newComponent));
+
+        MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
     }
 
     public remove(i: number) {
-        throw new Error("needs implementation or deletion");
-    }
+        IllegalArgumentException.assert(this.isValidIndex(i));
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+        const oldLength = this.getNoComponents();
+        this.components.splice(i, 1);
+
+        MethodFailedException.assert(this.getNoComponents() === oldLength);
     }
 }

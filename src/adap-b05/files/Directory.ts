@@ -12,6 +12,10 @@ export class Directory extends Node {
         return this.childNodes.has(cn);
     }
 
+    public getChildNodes(): Set<Node> {
+        return this.childNodes;
+    }
+
     public addChildNode(cn: Node): void {
         this.childNodes.add(cn);
     }

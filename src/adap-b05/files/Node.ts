@@ -3,6 +3,7 @@ import { InvalidStateException } from "../common/InvalidStateException";
 
 import { Name } from "../names/Name";
 import { Directory } from "./Directory";
+import {RootNode} from "./RootNode";
 
 export class Node {
 
@@ -48,6 +49,15 @@ export class Node {
         this.baseName = bn;
     }
 
+    private getRootNode(): RootNode {
+        let rootNode: Node = this;
+
+        while (!(rootNode instanceof RootNode)) {
+            rootNode = rootNode.parentNode;
+        }
+        return rootNode as RootNode
+    }
+
     public getParentNode(): Directory {
         return this.parentNode;
     }
@@ -57,7 +67,23 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        let findings: Set<Node> = new Set<Node>();
+        const root = this.getRootNode();
+
+        function iter(node: Node) {
+            if(node.baseName === "")
+                throw new InvalidStateException("basename empty");
+            if( node.baseName === bn) findings.add(node);
+            if( node instanceof Directory) {
+                for (const childNode of node.getChildNodes()) {
+                    iter(childNode);
+                }
+            }
+        }
+        for (const node of root.getChildNodes()) {
+            iter(node);
+        }
+        return findings;
     }
 
 }
