@@ -49,14 +49,6 @@ export class Node {
         this.baseName = bn;
     }
 
-    private getRootNode(): RootNode {
-        let rootNode: Node = this;
-
-        while (!(rootNode instanceof RootNode)) {
-            rootNode = rootNode.parentNode;
-        }
-        return rootNode as RootNode
-    }
 
     public getParentNode(): Directory {
         return this.parentNode;
@@ -67,22 +59,20 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        let findings: Set<Node> = new Set<Node>();
-        const root = this.getRootNode();
+        const rootNode: Node = this;
 
-        function iter(node: Node) {
-            if(node.baseName === "")
-                throw new InvalidStateException("basename empty");
-            if( node.baseName === bn) findings.add(node);
-            if( node instanceof Directory) {
-                for (const childNode of node.getChildNodes()) {
-                    iter(childNode);
-                }
-            }
+        return rootNode.doFindNodes(bn);
+    }
+
+    protected doFindNodes(bn: string): Set<Node> {
+
+        let findings: Set<Node> = new Set<Node>();
+
+        if(this.getBaseName() === "") {
+            throw new InvalidStateException("basename empty");
         }
-        for (const node of root.getChildNodes()) {
-            iter(node);
-        }
+        if(this.getBaseName() === bn) findings.add(this);
+
         return findings;
     }
 
