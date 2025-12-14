@@ -102,9 +102,11 @@ export class StringName extends AbstractName {
         InvalidStateException.assert(this.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
+
+        return this.clone() as StringName;
     }
 
-    public append(c: string) {
+    public append(c: string): StringName{
         IllegalArgumentException.assert(this.isValidComponent(c));
 
         const oldLength = this.getNoComponents();
@@ -120,6 +122,7 @@ export class StringName extends AbstractName {
         InvalidStateException.assert(this.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
+        return this.clone() as StringName;
     }
 
     public remove(i: number) {
@@ -133,5 +136,7 @@ export class StringName extends AbstractName {
         this.noComponents--;
 
         MethodFailedException.assert(this.getNoComponents() === oldLength);
+
+        return this.clone() as StringName;
     }
 }

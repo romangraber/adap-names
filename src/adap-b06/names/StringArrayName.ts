@@ -62,9 +62,11 @@ export class StringArrayName extends AbstractName {
         InvalidStateException.assert(this.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
+
+        return this.clone() as StringArrayName;
     }
 
-    public append(c: string) {
+    public append(c: string): StringArrayName {
 
         IllegalArgumentException.assert(this.isValidComponent(c));
 
@@ -77,6 +79,8 @@ export class StringArrayName extends AbstractName {
         InvalidStateException.assert(this.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
+
+        return this.clone() as StringArrayName;
     }
 
     public remove(i: number) {
