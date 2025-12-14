@@ -90,5 +90,7 @@ export class StringArrayName extends AbstractName {
         this.components.splice(i, 1);
 
         MethodFailedException.assert(this.getNoComponents() === oldLength);
+
+        return this.clone() as StringArrayName;
     }
 }
