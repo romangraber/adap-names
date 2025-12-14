@@ -104,9 +104,9 @@ export abstract class AbstractName implements Name {
     abstract getComponent(i: number): string;
     abstract setComponent(i: number, c: string): void;
 
-    abstract insert(i: number, c: string): void;
-    abstract append(c: string): void;
-    abstract remove(i: number): void;
+    abstract insert(i: number, c: string): Name;
+    abstract append(c: string): Name;
+    abstract remove(i: number): Name;
 
     public concat(other: Name): void {
 
