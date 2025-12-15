@@ -102,16 +102,19 @@ export abstract class AbstractName implements Name {
     abstract getNoComponents(): number;
 
     abstract getComponent(i: number): string;
-    abstract setComponent(i: number, c: string): void;
+    abstract setComponent(i: number, c: string): Name;
 
     abstract insert(i: number, c: string): Name;
     abstract append(c: string): Name;
     abstract remove(i: number): Name;
 
-    public concat(other: Name): void {
+    public concat(other: Name): Name {
 
+        let clone = this.clone();
         for(let i = 0; i < other.getNoComponents(); i++) {
-            this.append(other.getComponent(i))
+            clone.append(other.getComponent(i))
         }
+
+        return clone;
     }
 }

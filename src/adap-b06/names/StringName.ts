@@ -1,7 +1,7 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
 import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
-import {StringArrayName} from "../../adap-b02/names/StringArrayName";
+import {StringArrayName} from "./StringArrayName";
 import {IllegalArgumentException} from "../common/IllegalArgumentException";
 import {InvalidStateException} from "../common/InvalidStateException";
 import {MethodFailedException} from "../common/MethodFailedException";
@@ -74,69 +74,82 @@ export class StringName extends AbstractName {
         IllegalArgumentException.assert(this.isValidIndex(i));
         IllegalArgumentException.assert(this.isValidComponent(c));
 
-        let sac = new StringArrayName(this.getNames(), this.delimiter)
+        let clone = this.clone() as StringName;
+
+        let sac = new StringArrayName(clone.getNames(), clone.delimiter)
         sac.setComponent(i, c);
-        this.name = this.convertBackToString(sac);
+        clone.name = clone.convertBackToString(sac);
 
-        const newComponent: string = this.getComponent(i);
+        const newComponent: string = clone.getComponent(i);
 
-        InvalidStateException.assert(this.isValidComponent(newComponent));
+        InvalidStateException.assert(clone.isValidComponent(newComponent));
 
-        MethodFailedException.assert(this.getComponent(i) === c);
+        MethodFailedException.assert(clone.getComponent(i) === c);
+
+        return clone;
     }
 
     public insert(i: number, c: string) {
         IllegalArgumentException.assert(this.isValidIndex(i));
         IllegalArgumentException.assert(this.isValidComponent(c));
 
-        const oldLength = this.getNoComponents();
 
-        let sac = new StringArrayName(this.getNames(), this.delimiter)
+        let clone = this.clone() as StringName;
+
+        const oldLength = clone.getNoComponents();
+
+
+
+        let sac = new StringArrayName(clone.getNames(), clone.delimiter)
         sac.insert(i, c)
-        this.name = this.convertBackToString(sac);
-        this.noComponents++;
+        clone.name = clone.convertBackToString(sac);
+        clone.noComponents++;
 
-        const newLength: number = this.getNoComponents();
-        const newComponent: string = this.getComponent(i);
+        const newLength: number = clone.getNoComponents();
+        const newComponent: string = clone.getComponent(i);
 
-        InvalidStateException.assert(this.isValidComponent(newComponent));
+        InvalidStateException.assert(clone.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
 
-        return this.clone() as StringName;
+        return clone;
     }
 
     public append(c: string): StringName{
         IllegalArgumentException.assert(this.isValidComponent(c));
 
-        const oldLength = this.getNoComponents();
+        let clone = this.clone() as StringName;
 
-        let sac = new StringArrayName(this.getNames(), this.delimiter)
+        const oldLength = clone.getNoComponents();
+
+        let sac = new StringArrayName(clone.getNames(), clone.delimiter)
         sac.append(c)
-        this.name = this.convertBackToString(sac);
-        this.noComponents++;
+        clone.name = this.convertBackToString(sac);
+        clone.noComponents++;
 
-        const newLength: number = this.getNoComponents();
-        const newComponent: string = this.getComponent(newLength - 1);
+        const newLength: number = clone.getNoComponents();
+        const newComponent: string = clone.getComponent(newLength - 1);
 
-        InvalidStateException.assert(this.isValidComponent(newComponent));
+        InvalidStateException.assert(clone.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
-        return this.clone() as StringName;
+        return clone;
     }
 
     public remove(i: number) {
 
-        IllegalArgumentException.assert(this.isValidIndex(i));
-        const oldLength = this.getNoComponents();
+        let clone = this.clone() as StringName;
 
-        let sac = new StringArrayName(this.getNames(), this.delimiter)
+        IllegalArgumentException.assert(clone.isValidIndex(i));
+        const oldLength = clone.getNoComponents();
+
+        let sac = new StringArrayName(clone.getNames(), clone.delimiter)
         sac.remove(i)
-        this.name = this.convertBackToString(sac);
-        this.noComponents--;
+        clone.name = clone.convertBackToString(sac);
+        clone.noComponents--;
 
-        MethodFailedException.assert(this.getNoComponents() === oldLength);
+        MethodFailedException.assert(clone.getNoComponents() === oldLength);
 
-        return this.clone() as StringName;
+        return clone;
     }
 }

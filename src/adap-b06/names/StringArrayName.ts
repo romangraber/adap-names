@@ -39,58 +39,68 @@ export class StringArrayName extends AbstractName {
         IllegalArgumentException.assert(this.isValidIndex(i));
         IllegalArgumentException.assert(this.isValidComponent(c));
 
-        this.components[i] = c;
+        let clone = this.clone() as StringArrayName;
 
-        const newComponent: string = this.getComponent(i);
+        clone.components[i] = c;
 
-        InvalidStateException.assert(this.isValidComponent(newComponent));
+        const newComponent: string = clone.getComponent(i);
 
-        MethodFailedException.assert(this.getComponent(i) === c);
+        InvalidStateException.assert(clone.isValidComponent(newComponent));
+
+        MethodFailedException.assert(clone.getComponent(i) === c);
+
+        return clone;
     }
 
     public insert(i: number, c: string) {
         IllegalArgumentException.assert(this.isValidIndex(i));
         IllegalArgumentException.assert(this.isValidComponent(c));
 
-        const oldLength = this.getNoComponents();
+        let clone = this.clone() as StringArrayName;
+
+        const oldLength = clone.getNoComponents();
 
         this.components.splice(i, 0, c);
 
-        const newLength: number = this.getNoComponents();
-        const newComponent: string = this.getComponent(i);
+        const newLength: number = clone.getNoComponents();
+        const newComponent: string = clone.getComponent(i);
 
-        InvalidStateException.assert(this.isValidComponent(newComponent));
+        InvalidStateException.assert(clone.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
 
-        return this.clone() as StringArrayName;
+        return clone;
     }
 
     public append(c: string): StringArrayName {
 
         IllegalArgumentException.assert(this.isValidComponent(c));
 
-        const oldLength = this.getNoComponents();
-        this.components.push(c);
+        let clone = this.clone() as StringArrayName;
 
-        const newLength: number = this.getNoComponents();
-        const newComponent: string = this.getComponent(newLength - 1);
+        const oldLength = clone.getNoComponents();
+        clone.components.push(c);
 
-        InvalidStateException.assert(this.isValidComponent(newComponent));
+        const newLength: number = clone.getNoComponents();
+        const newComponent: string = clone.getComponent(newLength - 1);
+
+        InvalidStateException.assert(clone.isValidComponent(newComponent));
 
         MethodFailedException.assert(newLength === oldLength + 1 && newComponent === c);
 
-        return this.clone() as StringArrayName;
+        return clone;
     }
 
     public remove(i: number) {
         IllegalArgumentException.assert(this.isValidIndex(i));
 
-        const oldLength = this.getNoComponents();
-        this.components.splice(i, 1);
+        let clone = this.clone() as StringArrayName;
 
-        MethodFailedException.assert(this.getNoComponents() === oldLength);
+        const oldLength = clone.getNoComponents();
+        clone.components.splice(i, 1);
 
-        return this.clone() as StringArrayName;
+        MethodFailedException.assert(clone.getNoComponents() === oldLength);
+
+        return clone;
     }
 }
